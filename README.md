@@ -14,9 +14,10 @@ This repository contains a simple, reliable bootstrap script for initializing a 
 Download directly from GitHub, make it executable, then run a command:
 
 ```bash
-curl -fsSL -o ec2-bootstrap.sh \
-  https://raw.githubusercontent.com/SachinAgarwal1337/server-setup/blob/main/ec2-bootstrap.sh
+curl -fsSL -o ec2-bootstrap.sh https://raw.githubusercontent.com/SachinAgarwal1337/server-setup/main/ec2-bootstrap.sh
+```
 
+```bash
 chmod +x ec2-bootstrap.sh
 ./ec2-bootstrap.sh help
 ```
