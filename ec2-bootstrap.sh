@@ -61,19 +61,27 @@ task_swap() {
     return
   fi
 
-  if swapon --show | grep -q swapfile; then
-    echo "Swap already exists. Skipping."
-    return
+  if swapon --show | grep -q "/swapfile"; then
+    echo "Swap already exists. Skipping creation."
+  else
+    echo "Creating ${SWAP_SIZE}GB swap file..."
+    sudo fallocate -l "${SWAP_SIZE}G" /swapfile
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+    echo "Swap file created and enabled."
   fi
 
-  echo "Creating ${SWAP_SIZE}GB swap file..."
-  sudo fallocate -l "${SWAP_SIZE}G" /swapfile
-  sudo chmod 600 /swapfile
-  sudo mkswap /swapfile
-  sudo swapon /swapfile
-  echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+  echo "Tuning vm.swappiness..."
 
-  echo "Swap configured successfully."
+  sudo tee /etc/sysctl.d/99-swappiness.conf > /dev/null <<EOF
+vm.swappiness=10
+EOF
+
+  sudo sysctl --system > /dev/null
+
+  echo "Swap configuration complete."
 }
 
 task_docker() {
