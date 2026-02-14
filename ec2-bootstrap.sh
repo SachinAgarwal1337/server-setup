@@ -109,7 +109,8 @@ task_docker() {
       docker-ce-cli \
       containerd.io \
       docker-buildx-plugin \
-      docker-compose-plugin
+      docker-compose-plugin \
+      amazon-ecr-credential-helper
 
     sudo systemctl enable docker
     sudo systemctl start docker
@@ -124,6 +125,9 @@ task_docker() {
   else
     echo "User already in docker group."
   fi
+
+  echo "Configure ~/.docker/config.json file with ECR credential helper:"
+  echo "  {'credsStore': 'ecr-login'}"
 }
 
 task_all() {
